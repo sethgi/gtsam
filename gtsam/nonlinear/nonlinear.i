@@ -633,7 +633,8 @@ template <T = {double,
                gtsam::PinholeCamera<gtsam::Cal3Fisheye>,
                gtsam::PinholeCamera<gtsam::Cal3Unified>,
                gtsam::NavState,
-               gtsam::imuBias::ConstantBias}>
+               gtsam::imuBias::ConstantBias,
+              gtsam::EssentialMatrix}>
 virtual class PriorFactor : gtsam::NoiseModelFactor {
   PriorFactor(gtsam::Key key, const T& prior,
               const gtsam::noiseModel::Base* noiseModel);
@@ -672,7 +673,8 @@ template <T = {double,
                gtsam::PinholeCamera<gtsam::Cal3Fisheye>,
                gtsam::PinholeCamera<gtsam::Cal3Unified>,
                gtsam::NavState,
-               gtsam::imuBias::ConstantBias}>
+               gtsam::imuBias::ConstantBias,
+              gtsam::EssentialMatrix}>
 virtual class ExtendedPriorFactor : gtsam::NoiseModelFactor {
   ExtendedPriorFactor(gtsam::Key key, const T& origin, const gtsam::SharedNoiseModel& noiseModel);
   ExtendedPriorFactor(gtsam::Key key, const T& origin, const gtsam::Vector& mean, const gtsam::SharedNoiseModel& noiseModel);

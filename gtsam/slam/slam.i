@@ -495,6 +495,18 @@ virtual class EssentialMatrixConstraint : gtsam::NoiseModelFactor {
   const gtsam::EssentialMatrix& measured() const;
 };
 
+#include <gtsam/slam/EssentialMatrixTernaryConstraint.h>
+virtual class EssentialMatrixTernaryConstraint : gtsam::NoiseModelFactor {
+  EssentialMatrixTernaryConstraint(gtsam::Key key1, gtsam::Key key2, gtsam::Key keyE,
+                                   const gtsam::noiseModel::Base *model);
+  void print(string s = "", const gtsam::KeyFormatter& keyFormatter =
+                                gtsam::DefaultKeyFormatter) const;
+  bool equals(const gtsam::EssentialMatrixTernaryConstraint& expected, double tol) const;
+  gtsam::Vector evaluateError(const gtsam::Pose3& p1,
+                              const gtsam::Pose3& p2,
+                              const gtsam::EssentialMatrix& E) const;
+};
+
 #include <gtsam/slam/dataset.h>
 
 enum NoiseFormat {

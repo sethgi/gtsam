@@ -55,7 +55,7 @@ Vector EssentialMatrixConstraint::evaluateError(const Pose3& p1,
   if (Hp1 || Hp2) {
     hx = EssentialMatrix::FromPose3(_1P2_, D_hx_1P2);
   } else {
-      hx = EssentialMatrix::FromPose3(_1P2_, OptionalNone);
+    hx = EssentialMatrix::FromPose3(_1P2_, OptionalNone);
   }
 
   // Calculate derivatives if needed

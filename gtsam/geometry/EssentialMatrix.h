@@ -11,6 +11,7 @@
 #include <gtsam/geometry/Unit3.h>
 #include <gtsam/geometry/Point2.h>
 #include <gtsam/base/Manifold.h>
+#include <gtsam/global_includes.h>
 
 #include <iosfwd>
 #include <string>
@@ -100,7 +101,7 @@ class EssentialMatrix {
     Vector5 v;
     v << v1, v2;
     return v;
-  }
+  }                       
   /// @}
 
   /// @name Essential matrix methods

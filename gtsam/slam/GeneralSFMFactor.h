@@ -271,8 +271,8 @@ public:
       if (H1) *H1 = Matrix::Zero(2, 6);
       if (H2) *H2 = Matrix::Zero(2, 3);
       if (H3) *H3 = Matrix::Zero(2, DimK);
-      std::cout << e.what() << ": Landmark "<< DefaultKeyFormatter(this->key2())
-      << " behind Camera " << DefaultKeyFormatter(this->key1()) << std::endl;
+      // std::cout << e.what() << ": Landmark "<< DefaultKeyFormatter(this->key2())
+      // << " behind Camera " << DefaultKeyFormatter(this->key1()) << std::endl;
     }
     return Z_2x1;
   }

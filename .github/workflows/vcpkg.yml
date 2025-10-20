@@ -2,7 +2,7 @@ name: vcpkg
 on:
   pull_request:
   push:
-    # Runs on pushes targeting the develop branch 
+    # Runs on pushes targeting the develop branch
     branches: [develop]
 
 # Cancels any in-progress workflow runs for the same PR when a new push is made,
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:      
+        include:
           - os: windows-latest
             triplet: x64-windows-release
             build_type: Release
@@ -108,6 +108,7 @@ jobs:
           boost-system
           boost-thread
           boost-timer
+          eigen3
           tbb
           pybind11
           geographiclib
@@ -146,6 +147,12 @@ jobs:
           $VCPKG_INSTALLATION_ROOT/installed/${{ matrix.triplet }}/tools/python3/${{ matrix.python }} -m ensurepip --upgrade
           $VCPKG_INSTALLATION_ROOT/installed/${{ matrix.triplet }}/tools/python3/${{ matrix.python }} -m pip install -r python/dev_requirements.txt
 
+      - name: Set Swap Space (Linux)
+        if: runner.os == 'Linux'
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 6
+
       - name: cmake config
         if: success()
         shell: bash
@@ -166,7 +173,7 @@ jobs:
               -DGTSAM_BUILD_TESTS=ON \
               -DGTSAM_BUILD_UNSTABLE=ON \
               -DGTSAM_ALLOW_DEPRECATED_SINCE_V43=OFF \
-              -DGTSAM_USE_SYSTEM_EIGEN=OFF \
+              -DGTSAM_USE_SYSTEM_EIGEN=ON \
               -DGTSAM_USE_SYSTEM_METIS=OFF \
               -DGTSAM_USE_SYSTEM_PYBIND=ON \
               -DGTSAM_ENABLE_GEOGRAPHICLIB=ON \

@@ -859,11 +859,66 @@ template <T = {gtsam::Point2,
                gtsam::imuBias::ConstantBias}>
 virtual class ExtendedKalmanFilter {
   ExtendedKalmanFilter(gtsam::Key key_initial, const T& x_initial, const gtsam::noiseModel::Gaussian* P_initial);
-  
+
   T predict(const gtsam::NoiseModelFactor& motionFactor);
   T update(const gtsam::NoiseModelFactor& measurementFactor);
-  
+
   gtsam::JacobianFactor::shared_ptr Density() const;
 };
+
+//*************************************************************************
+// Expression-based factors
+//*************************************************************************
+#include <gtsam/nonlinear/Expression.h>
+template <T = {gtsam::Pose2, gtsam::Pose3}>
+class Expression {
+  // Construct a constant expression
+  Expression(const T& value);
+
+  // Construct a leaf expression from a key
+  Expression(gtsam::Key key);
+
+  // Construct a leaf expression from a symbol
+  Expression(gtsam::Symbol symbol);
+
+  // Construct a leaf expression from symbol character and index
+  Expression(unsigned char c, size_t j);
+
+  // Return keys that play in this expression
+  // std::set<gtsam::Key> keys() const;
+
+  // Return value, N.B. must be const Values, no overload allowed
+  T value(const gtsam::Values& values) const;
+
+  void print(string s = "") const;
+};
+
+#include <gtsam/nonlinear/ExpressionFactor.h>
+template <T = {gtsam::Pose2, gtsam::Pose3}>
+virtual class ExpressionFactor : gtsam::NoiseModelFactor {
+  ExpressionFactor(const gtsam::noiseModel::Base* noiseModel,
+                   const T& measurement,
+                   const gtsam::Expression<T>& expression);
+
+  // Return the measurement
+  T measured() const;
+
+  void print(string s = "",
+             const gtsam::KeyFormatter& keyFormatter = gtsam::DefaultKeyFormatter) const;
+
+  bool equals(const gtsam::NonlinearFactor& f, double tol) const;
+
+  gtsam::Vector unwhitenedError(const gtsam::Values& x) const;
+};
+
+#include <gtsam/nonlinear/expressions.h>
+// Helper functions for creating expressions
+template <T = {gtsam::Pose2, gtsam::Pose3}>
+gtsam::Expression<T> between(const gtsam::Expression<T>& t1,
+                              const gtsam::Expression<T>& t2);
+
+template <T = {gtsam::Pose2, gtsam::Pose3}>
+gtsam::Expression<T> compose(const gtsam::Expression<T>& t1,
+                              const gtsam::Expression<T>& t2);
 
 }  // namespace gtsam

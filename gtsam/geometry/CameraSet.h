@@ -182,7 +182,7 @@ class CameraSet : public std::vector<CAMERA, Eigen::aligned_allocator<CAMERA>> {
 
     // Create a SymmetricBlockMatrix (augmented hessian, with extra row/column
     // with info vector)
-    size_t M1 = ND * m + 1;
+    size_t M1 = ND * m + 1; // 
     std::vector<DenseIndex> dims(m + 1);  // this also includes the b term
     std::fill(dims.begin(), dims.end() - 1, ND);
     dims.back() = 1;

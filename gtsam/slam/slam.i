@@ -291,6 +291,40 @@ virtual class SmartProjectionPoseFactor : gtsam::NonlinearFactor {
   gtsam::TriangulationResult point(const gtsam::Values& values) const;
 };
 
+#include <gtsam/slam/SmartProjectionPoseCalFactor.h>
+// Smart factor that optimizes poses and calibration(s)
+template <CALIBRATION = {gtsam::Cal3_S2, gtsam::Cal3DS2}>
+virtual class SmartProjectionPoseCalFactor : gtsam::NonlinearFactor {
+  SmartProjectionPoseCalFactor(const gtsam::noiseModel::Base* sharedNoiseModel,
+                               const gtsam::SmartProjectionParams& params);
+
+  void add(const gtsam::Point2& measured, gtsam::Key poseKey, gtsam::Key calibrationKey);
+  void add(const gtsam::Point2Vector& measurements,
+           const gtsam::KeyVector& poseKeys,
+           const gtsam::KeyVector& calibrationKeys);
+
+  const gtsam::KeyVector& poseKeys() const;
+  const gtsam::KeyVector& calibrationKeys() const;
+
+  double error(const gtsam::Values& values) const;
+
+  gtsam::GaussianFactor* linearize(const gtsam::Values& values) const;
+  gtsam::GaussianFactor* linearizeDamped(const gtsam::Values& values,
+                                         double lambda = 0.0) const;
+
+  // Triangulation methods (inherited from SmartProjectionFactor)
+  gtsam::TriangulationResult point() const;
+  gtsam::TriangulationResult point(const gtsam::Values& values) const;
+  bool isValid() const;
+  bool isDegenerate() const;
+  bool isPointBehindCamera() const;
+  bool isOutlier() const;
+  bool isFarPoint() const;
+
+  // enabling serialization functionality
+  void serialize() const;
+};
+
 #include <gtsam/slam/SmartProjectionRigFactor.h>
 // Only for PinholePose cameras -> PinholeCamera is not supported
 template <CAMERA = {gtsam::PinholePoseCal3_S2, gtsam::PinholePoseCal3DS2,
